@@ -1,0 +1,16 @@
+#!/bin/bash
+mkdir -p yocto
+cd yocto
+mkdir -p sources
+cd sources
+git clone git://git.yoctoproject.org/poky -b dunfell
+git clone git://git.yoctoproject.org/meta-raspberrypi -b dunfell
+git clone https://git.openembedded.org/meta-openembedded -b dunfell
+cd ..
+# we are in the yocto directory with the build and sources directories
+pwd
+source sources/poky/oe-init-build-env
+pwd
+cp ../../my-bblayers.conf conf/bblayers.conf
+sed -i '1s/^.*$/MACHINE \?= "raspberrypi3"/' conf/local.conf
+bitbake core-image-base
